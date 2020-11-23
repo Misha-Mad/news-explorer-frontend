@@ -62,7 +62,7 @@
 
 .navigation__button {
 
-    height: 48px;
+    height: 40px;
     border: 1px solid #fff;
     box-sizing: border-box;
     border-radius: 100px;
@@ -70,6 +70,7 @@
     color: #fff;
     outline: none;
     cursor: pointer;
+    padding: 0 16px;
 }
 
 .navigation__button_saved-news {
@@ -85,7 +86,9 @@
 }
 
 .navigation__icon {
+    width: 17.4px;
     margin-left: 10px;
+    vertical-align: middle;
 }
 
 .navigation__burger-overlay {

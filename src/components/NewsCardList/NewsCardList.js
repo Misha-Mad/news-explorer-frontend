@@ -3,7 +3,7 @@ import NewsCard from '../NewsCard/NewsCard';
 import cards from '../../utils/utils';
 import {useState} from 'react';
 
-function NewsCardList({isBurgerMenu, isStartEndArray}) {
+function NewsCardList({isBurgerMenu}) {
 
 	const [isArticles, setArticles] = useState([cards[0], cards[1], cards[2]]);
 	const [isButtonDisabled, setButtonDisabled] = useState(false)

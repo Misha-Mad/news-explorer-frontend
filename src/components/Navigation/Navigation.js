@@ -32,7 +32,7 @@ function Navigation({isBurgerButton, isBurgerMenu, onSwitchMenu, onSignIn}) {
 
 			<div className={`${isBurgerMenu && 'navigation__burger-overlay'}`}/>
 
-			<div className={
+			<nav className={
 				`navigation 
 				${isBurgerButton && 'navigation_hide'} 
 				${isBurgerMenu && 'navigation_burger'}`}
@@ -60,10 +60,10 @@ function Navigation({isBurgerButton, isBurgerMenu, onSwitchMenu, onSignIn}) {
 					${location.pathname === '/saved-news' && 'navigation__button_saved-news'}
 					`}
 				>{location.pathname === '/saved-news' ? 'Misha' : 'Авторизоваться'}
-					<img className="navigation__icon" src={`${(location.pathname === '/saved-news' && !isBurgerMenu) ? ExitSavedNews : ExitIcon}`}/>
+					{location.pathname === '/saved-news' && <img alt="иконка логаута" className="navigation__icon" src={`${(location.pathname === '/saved-news' && !isBurgerMenu) ? ExitSavedNews : ExitIcon}`}/>}
 				</button>
 
-			</div>
+			</nav>
 		</>
 	)
 }
