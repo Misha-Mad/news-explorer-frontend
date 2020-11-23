@@ -1,0 +1,45 @@
+.header {
+    width: 100%;
+    max-width: 1440px;
+    min-height: 80px;
+    margin: 0 auto;
+    border-bottom: 1px solid rgba(255, 255, 255, .3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+}
+
+.header__logo {
+    width: 140px;
+    height: 20px;
+    background-image: url('../../images/Logo.svg');
+    background-repeat: no-repeat;
+}
+
+.header__link {
+    margin-left: 104px;
+}
+
+.burger-menu__header {
+    background-color: #1A1B22;
+    position: fixed;
+}
+
+@media (max-width: 900px) {
+    .header {
+        height: 66px;
+    }
+    .header__link {
+        margin-left: 40px;
+    }
+}
+
+@media (max-width: 750px) {
+    .header {
+        min-height: 56px;
+    }
+    .header__link {
+        margin-left: 16px;
+    }
+}
