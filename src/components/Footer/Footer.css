@@ -1,0 +1,93 @@
+.footer {
+    width: 100%;
+    max-width: 1440px;
+    min-height: 80px;
+    margin: auto auto 0;
+    display: flex;
+    justify-content: center;
+    background-color: #fff;
+}
+
+.footer__copyright {
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 22px;
+    color: #B6BCBF;
+    margin: 32px auto 0 7.2%;
+}
+
+.footer__link {
+    font-family: Roboto, sans-serif;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 24px;
+    color: #1A1B22;
+    margin: 31px 40px 0 0;
+    text-decoration: none;
+}
+
+.footer__github {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../images/GitHubIcon.svg');
+    margin: 31px 28px 0 0;
+}
+
+.footer__facebook {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../images/FBIcon.svg');
+    margin: 31px 28px 0 0;
+    border-radius: 2px;
+}
+
+@media (max-width: 950px) {
+    .footer {
+        width: 100%;
+    }
+
+    .footer__copyright {
+        margin-left: 40px;
+    }
+
+    .footer__link {
+        margin-right: 26px;
+    }
+}
+
+@media (max-width: 750px) {
+    .footer {
+        flex-direction: column;
+        align-items: flex-start;
+        position: relative;
+
+    }
+
+    .footer__link {
+        order: 1;
+        margin: 20px 0 20px 16px;
+    }
+
+    .footer__copyright {
+        order: 3;
+        margin: 20px 0 20px 16px;
+    }
+
+    .footer__facebook {
+        position: absolute;
+        top: 22px;
+        right: 18px;
+        margin: 0;
+    }
+
+    .footer__github {
+        position: absolute;
+        top: 22px;
+        right: 66px;
+        margin: 0;
+    }
+
+}
