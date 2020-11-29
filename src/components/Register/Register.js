@@ -1,9 +1,9 @@
-import './SignUpPopup.css';
+import './Register.css';
 import {useEffect} from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import useFormWithValidation from '../../hooks/useForm';
 
-function SignUpPopup ({isOpen, onClose, onSwitch}) {
+function Register ({isOpen, onClose, onSwitch, onRegistration, isError}) {
 
 	const {values, handleChange, errors, isValid, resetForm} = useFormWithValidation()
 
@@ -11,12 +11,21 @@ function SignUpPopup ({isOpen, onClose, onSwitch}) {
 		resetForm({email: '', password: '', name: ''},{},false);
 	}, [isOpen, resetForm])
 
+	function handleSubmit(e) {
+		e.preventDefault();
+		const email = values.email
+		const password = values.password;
+		const name = values.name;
+		onRegistration(email, password, name);
+	}
+
 	return (
-		<PopupWithForm name={'edit'}
+		<PopupWithForm name={'register'}
 									 title={'Регистрация'}
 									 isOpen={isOpen}
 									 onClose={onClose}
 									 onSwitch={onSwitch}
+									 onSubmit={handleSubmit}
 		>
 			<label className="popup__label" htmlFor="email-registration">Email</label>
 			<input name="email"
@@ -58,13 +67,15 @@ function SignUpPopup ({isOpen, onClose, onSwitch}) {
 						 value={values.name || ''}
 			/>
 			<span
-				className={`popup__input-error popup__specialty-error popup__input-error_active ${!isValid && 'popup__input-error_active'}`}>{ errors.name || '' }</span>
-			<span
-				className={`popup__input-error_registration `}
-			/>
+				className={`popup__input-error popup__specialty-error popup__input-error_active ${!isValid && 'popup__input-error_active'}`}>{ errors.name || '' }
+			</span>
+			<span className={`popup__input-error_registration ${isError && 'popup__input-error_registration_active'} `}>
+				Такой пользователь уже есть
+			</span>
+			<button disabled={!isValid} type="submit" className={`popup__save ${!isValid && 'popup__save_disabled'} `} onSubmit={handleSubmit}>Зарегистрироваться</button>
 		</PopupWithForm>
 	)
 
 }
 
-export default SignUpPopup;
+export default Register;

@@ -1,12 +1,12 @@
 import './NewsCardList.css';
 import NewsCard from '../NewsCard/NewsCard';
-import cards from '../../utils/utils';
 import {useState} from 'react';
 
-function NewsCardList({isBurgerMenu}) {
+function NewsCardList({isBurgerMenu, cards, isLoggedIn, onSaveCard, onFormatDate, onDeleteCard, onSignUpPopup, isBlockedTag}) {
 
 	const [isArticles, setArticles] = useState([cards[0], cards[1], cards[2]]);
-	const [isButtonDisabled, setButtonDisabled] = useState(false)
+	const [isButtonDisabled, setButtonDisabled] = useState(false);
+
 
 	//функция для кнопки показать еще
 	function handleSeeMoreNews() {
@@ -26,7 +26,7 @@ function NewsCardList({isBurgerMenu}) {
 			return;
 		}
 		setArticles([...isArticles, ...moreArticles]);
-		if (moreArticles[3] === undefined) {
+		if (cards[isArticles.length + 3] === undefined) {
 			setButtonDisabled(true);
 		}
 	}
@@ -35,11 +35,17 @@ function NewsCardList({isBurgerMenu}) {
 		<section className="news-card-list">
 			<h2 className={`${isBurgerMenu && "news-card-list__title_burger-menu" } news-card-list__title`}>Результаты поиска</h2>
 			<div className="news-card-list__container">
-				{isArticles.map((card) => (
-					<NewsCard key={card.id} card={card} />
+				{cards[0] && isArticles.map((card, i) => (
+					<NewsCard key={i} card={card}
+										isLoggedIn={isLoggedIn}
+										onSaveCard={onSaveCard}
+										onFormatDate={onFormatDate}
+										onDeleteCard={onDeleteCard}
+										onSignUpPopup={onSignUpPopup}
+										isBlockedTag={isBlockedTag}/>
 				))}
 			</div>
-			<button onClick={handleSeeMoreNews}	className={`news-card-list__button ${isButtonDisabled && 'news-card-list__button_disabled'} `}>Показать еще</button>
+			{!isButtonDisabled && <button onClick={handleSeeMoreNews}	className={`news-card-list__button`}>Показать еще</button>}
 		</section>
 	)
 }

@@ -1,34 +1,27 @@
 import './Header.css';
 import Navigation from '../Navigation/Navigation';
-import {Link} from "react-router-dom";
+import {Link, useLocation } from "react-router-dom";
 
-function Header({isBurgerButton, isBurgerMenu, onSwitchMenu, onSignIn}) {
+function Header({isBurgerButton, isBurgerMenu, onSwitchMenu, onSignIn, onSignOut, isLoggedIn}) {
+
+	const location = useLocation();
 
 	return (
-		isBurgerMenu ? (
-				<header className="header burger-menu__header">
-					<Link to="/" className="header__link">
-						<div className="header__logo"/>
-					</Link>
-					<Navigation
-						isBurgerButton={isBurgerButton}
-						isBurgerMenu={isBurgerMenu}
-						onSwitchMenu={onSwitchMenu}
-						onSignIn={onSignIn}
-					/>
-				</header>
-		) : (
-			<header className="header">
-				<Link to="/" className="header__link">
-					<div className="header__logo"/>
-				</Link>
-				<Navigation
-					isBurgerButton={isBurgerButton}
-					isBurgerMenu={isBurgerMenu}
-					onSwitchMenu={onSwitchMenu}
-					onSignIn={onSignIn}
-				/>
-			</header>)
+
+		<header className={`header ${isBurgerMenu && 'burger-menu__header'} ${location.pathname === '/saved-news' && 'header_saved-news'}`}>
+			<Link to="/" className="header__link">
+				<div className={`header__logo ${location.pathname === '/saved-news' && 'header__logo_saved-news'}`}/>
+			</Link>
+			<Navigation
+				isBurgerButton={isBurgerButton}
+				isBurgerMenu={isBurgerMenu}
+				onSwitchMenu={onSwitchMenu}
+				onSignIn={onSignIn}
+				onSignOut={onSignOut}
+				isLoggedIn={isLoggedIn}
+			/>
+		</header>
+
 	)
 }
 

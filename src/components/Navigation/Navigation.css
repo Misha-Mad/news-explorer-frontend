@@ -60,6 +60,10 @@
     margin: 0;
 }
 
+.navigation__link_hidden {
+    display: none;
+}
+
 .navigation__button {
 
     height: 40px;

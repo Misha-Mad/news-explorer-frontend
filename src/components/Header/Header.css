@@ -10,10 +10,30 @@
     z-index: 2;
 }
 
+.header_saved-news {
+    width: 100%;
+    max-width: 1440px;
+    min-height: 80px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+    background-color: #fff;
+    border-bottom: 1px solid #D1D2D6;
+}
+
 .header__logo {
     width: 140px;
     height: 20px;
     background-image: url('../../images/Logo.svg');
+    background-repeat: no-repeat;
+}
+
+.header__logo_saved-news {
+    width: 140px;
+    height: 20px;
+    background-image: url('../../images/Logo_SavedNews.svg');
     background-repeat: no-repeat;
 }
 
@@ -24,6 +44,15 @@
 .burger-menu__header {
     background-color: #1A1B22;
     position: fixed;
+}
+
+@media (max-width: 750px) {
+    .header_saved-news {
+        min-height: 66px;
+    }
+    .header__logo_saved-news {
+        margin-left: 16px;
+    }
 }
 
 @media (max-width: 900px) {

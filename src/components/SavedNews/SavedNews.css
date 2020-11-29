@@ -1,60 +1,11 @@
 .saved-news {
-    min-height: 974px;
-    width: 100%;
     max-width: 1440px;
     margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-}
-
-.saved-news_burger-menu {
-    margin-top: 67px;
-}
-
-.saved-news__description {
-    background-color: #fff;
-    padding-left: 104px;
-    display: flex;
-    flex-direction: column;
-}
-
-.saved-news__subtitle {
-    width: 300px;
-    font-family: Roboto, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 24px;
-    color: rgba(26, 27, 34, 0.5);
-    margin: 40px 0 28px;
-}
-
-.saved-news__title {
-    width: 500px;
-    font-family: Roboto Slab, serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 40px;
-    line-height: 46px;
-    color: #1A1B22;
-    margin: 0 0 30px;
-}
-
-.saved-news__keywords {
-    font-family: Roboto, sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 24px;
-    color: #1A1B22;
-    margin: 0 0 56px;
-}
-
-.saved-news__keyword {
-    font-weight: bold;
+    background-color: #F5F6F7;
 }
 
 .saved-news__container {
+
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     grid-gap: 16px;
@@ -62,25 +13,7 @@
     margin: 0 102px 0;
 }
 
-
 @media (max-width: 900px) {
-    .saved-news__description {
-        padding-left: 40px;
-    }
-    .saved-news__subtitle {
-        font-size: 14px;
-        margin: 24px 0 16px;
-    }
-    .saved-news__title {
-        width: 336px;
-        font-size: 30px;
-        line-height: 34px;
-        margin-bottom: 16px;
-    }
-    .saved-news__keywords {
-        font-size: 14px;
-        margin-bottom: 32px;
-    }
     .saved-news__container {
         padding: 32px 0;
         margin: 0 40px 0;
@@ -89,23 +22,7 @@
     }
 }
 
-
 @media (max-width: 450px) {
-    .saved-news__description {
-        padding-left: 16px;
-    }
-    .saved-news__subtitle {
-        width: 200px;
-        font-size: 12px;
-        margin: 8px 0 16px;
-    }
-    .saved-news__title {
-        width: 260px;
-    }
-    .saved-news__keywords {
-        width: 280px;
-        font-size: 18px;
-    }
     .saved-news__container {
         padding: 24px 0;
         margin: 0 16px 0;

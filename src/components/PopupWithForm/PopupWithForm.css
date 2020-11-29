@@ -137,6 +137,15 @@
     outline: none;
 }
 
+.popup__save_disabled {
+    background: #E6E8EB;
+    color: #B6BCBF;
+}
+
+.popup__save_disabled:hover {
+    background: #E6E8EB;
+}
+
 .popup__save_inactive {
     background: #E6E8EB;
     color: #B6BCBF;
@@ -203,6 +212,10 @@
     text-align: center;
     margin: 0 auto;
     visibility: hidden;
+}
+
+.popup__input-error_registration_active {
+    visibility: visible;
 }
 
 @media (max-width: 550px) {
