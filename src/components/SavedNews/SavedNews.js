@@ -15,8 +15,8 @@ function SavedNews({isSaveCards, setSaveCards, onDeleteCard, onFormatDate}) {
 	return (
 
 		<section className="saved-news">
-			{ isSaveCards && <div className="saved-news__container">
-			{isSaveCards.map((card, i) => (
+			{ isSaveCards[0] && <div className="saved-news__container">
+			{isSaveCards.map((card) => (
 				<NewsCard card={card} key={card._id} onDeleteCard={onDeleteCard} onFormatDate={onFormatDate}/>
 			))}
 			</div>}

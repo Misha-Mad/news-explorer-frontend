@@ -1,5 +1,5 @@
 export const CONFIG_MAIN_API = {
-	baseUrl: 'http://localhost:3001',
+	baseUrl: 'https://www.api.ne.students.nomoreparties.site',
 }
 
 export const CONFIG_NEWS_API = {
