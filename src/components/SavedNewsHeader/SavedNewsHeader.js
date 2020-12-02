@@ -54,7 +54,7 @@ function SavedNewsHeader({isSaveCards}) {
 					<span className="saved-news-header__keyword"> {isTagArr[0]}</span>
 					{(isTagArr.length > 1) && <span>,</span>}
 					<span className="saved-news-header__keyword"> {isTagArr[1]}</span>
-					{(isTagArr.length > 2) && <span className="saved-news-header__keyword"> и {isTagArr.length - 2}-м другим</span>}
+					{(isTagArr.length > 2) && <span className="saved-news-header__keyword"> и {isTagArr.length - 2} другим</span>}
 				</p>
 			</div>
 		</section>
