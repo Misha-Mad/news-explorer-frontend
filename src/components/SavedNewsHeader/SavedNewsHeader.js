@@ -16,26 +16,26 @@ function SavedNewsHeader({isSaveCards}) {
 	}
 
 	useEffect(() => {
-		let arrayLength = isSaveCards.length.toString();
-		let lastNumberOfArray = parseInt(arrayLength[arrayLength.length - 1]);
+		const arrayLength = isSaveCards.length.toString();
+		const lastNumberOfArray = parseInt(arrayLength[arrayLength.length - 1]);
 		if (lastNumberOfArray === 1 && isSaveCards.length !== 11) {
 			setSaveWord('сохранённая статья');
 		} else {
 			setSaveWord('сохранённых статей');
 		}
-		let tagArray = [];
+		const tagArray = [];
 		isSaveCards.map((card) => {
-			tagArray.push(card.keyword);
+			return tagArray.push(card.keyword);
 		});
-		let countTagObj = countTag(tagArray);
-		let sortableTag = [];
+		const countTagObj = countTag(tagArray);
+		const sortableTag = [];
 		for (let tag in countTagObj) {
 			sortableTag.push([tag, countTagObj[tag]])
 		}
 		sortableTag.sort((a, b) => {
 			return b[1] - a[1];
 		});
-		let resultTag = sortableTag.map(arr => {
+		const resultTag = sortableTag.map(arr => {
 			return arr[0];
 		})
 		setTagArr(resultTag);

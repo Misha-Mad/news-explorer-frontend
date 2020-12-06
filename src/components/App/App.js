@@ -18,344 +18,377 @@ import {formatDate} from '../../utils/DateCalculate';
 
 function App() {
 
-	const history = useHistory();
-	const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-	const [burgerButtonActive, setBurgerButtonActive] = useState(false);
-	const [burgerMenuActive, setBurgerMenuActive] = useState(false);
-	const [isSignInPopupOpen, setIsSignInPopupOpen] = useState(false);
-	const [isSignUpPopupOpen, setIsSignUpPopupOpen] = useState(false);
-	const [isInfoTooltipOpen, setInfoTooltipOpen] = useState(false);
-	const [isRegistrationError, setRegistrationError] = useState(false);
-	const [loggedIn, setloggedIn] = useState(false);
-	const [currentUser, setCurrentUser] = useState({});
-	const [isCurrentCards, setCurrentCards] = useState([]);
-	const [isNotFound, setNotFound] = useState(false);
-	const [isLoading, setLoading] = useState(false);
-	const [isSaveCards, setSaveCards] = useState([]);
-	const [isBlockedTag, setBlockedTag] = useState(false);
+    const history = useHistory();
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+    const [burgerButtonActive, setBurgerButtonActive] = useState(false);
+    const [burgerMenuActive, setBurgerMenuActive] = useState(false);
+    const [isSignInPopupOpen, setIsSignInPopupOpen] = useState(false);
+    const [isSignUpPopupOpen, setIsSignUpPopupOpen] = useState(false);
+    const [isInfoTooltipOpen, setInfoTooltipOpen] = useState(false);
+    const [loggedIn, setloggedIn] = useState(false);
+    const [currentUser, setCurrentUser] = useState({});
+    const [isCurrentCards, setCurrentCards] = useState([]);
+    const [isNotFound, setNotFound] = useState(false);
+    const [isLoading, setLoading] = useState(false);
+    const [isSaveCards, setSaveCards] = useState([]);
+    const [isBlockedTag, setBlockedTag] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [errorNewsMessage, setErrorNewsMessage] = useState('');
 
-	//проверка токена
-	const tokenCheck = useCallback(() => {
-		const jwt = localStorage.getItem('token');
-		if (jwt) {
-			mainApi.getUser(jwt)
-				.then((currentUser) => {
-					setCurrentUser(currentUser);
-				})
-				.then(() => {
-					setloggedIn(true);
-					setIsSignInPopupOpen(false);
-				})
-				.catch((err) => {
-					setloggedIn(false);
-					console.log(err);
-				})
-		}
-	}, [])
+    //проверка токена
+    const tokenCheck = useCallback(() => {
+        setErrorNewsMessage('');
+        setErrorMessage('');
+        const jwt = localStorage.getItem('token');
+        if (jwt) {
+            mainApi.getUser(jwt)
+                .then((currentUser) => {
+                    setCurrentUser(currentUser);
+                })
+                .then(() => {
+                    setloggedIn(true);
+                    setIsSignInPopupOpen(false);
+                })
+                .catch((err) => {
+                    setloggedIn(false);
+                    console.log(err);
+                })
+        }
+    }, [])
 
-	//проверка токена
-	useEffect(() => {
-		tokenCheck();
-	}, [tokenCheck])
+    //проверка токена
+    useEffect(() => {
+        tokenCheck();
+    }, [tokenCheck])
 
-	// кладём в стейты данные из локального хранилища и открываем попап при редиректе
-	useEffect(() => {
-		let state = {...history.location.state}
-		const localCards = JSON.parse(localStorage.getItem('localCards'));
-		if (localCards !== null) {
-			setCurrentCards(localCards);
-		}
-		if (state.url === '/saved-news') {
-			setIsSignInPopupOpen(true);
-			delete state.url;
-			history.replace({...history.location, state});
-		} else {
-			setIsSignInPopupOpen(false);
-			delete state.url;
-			history.replace({...history.location, state});
-		}
-	}, [loggedIn, history])
+    // кладём в стейты данные из локального хранилища и открываем попап при редиректе
+    useEffect(() => {
+        setErrorMessage('');
+        const state = {...history.location.state}
+        const localCards = JSON.parse(localStorage.getItem('localCards'));
+        if (localCards !== null) {
+            setCurrentCards(localCards);
+        }
+        if (state.url === '/saved-news') {
+            setIsSignInPopupOpen(true);
+            delete state.url;
+            history.replace({...history.location, state});
+        } else {
+            setIsSignInPopupOpen(false);
+            delete state.url;
+            history.replace({...history.location, state});
+        }
+    }, [loggedIn, history])
 
 //закрытие попапов на escape и оверлей
-	useEffect(() => {
-		function handleEscClose(event) {
-			if (event.key === "Escape") {
-				closeAllPopups();
-			}
-		}
-		function closeByOverlay(event) {
-			if (event.target.classList.contains('popup_active')) {
-				closeAllPopups();
-			}
-		}
-		document.addEventListener('mousedown', closeByOverlay);
-		document.addEventListener('keydown', handleEscClose);
-		return () => {
-			document.removeEventListener('keydown', handleEscClose);
-			document.removeEventListener('mousedown', closeByOverlay);
-		}
-	})
+    useEffect(() => {
+        function handleEscClose(event) {
+            if (event.key === "Escape") {
+                closeAllPopups();
+            }
+        }
 
-	//отслеживание изменения ширины окна
-	useEffect(() => {
-		function resizeScreen(e) {
-			setScreenWidth(e.target.innerWidth);
-		}
-		window.addEventListener('resize', resizeScreen);
-		return () => {
-			window.removeEventListener('resize', resizeScreen);
-		};
-	}, [])
+        function closeByOverlay(event) {
+            if (event.target.classList.contains('popup_active')) {
+                closeAllPopups();
+            }
+        }
 
-	//функция закрытия попапов
-	function closeAllPopups() {
-		setIsSignInPopupOpen(false);
-		setIsSignUpPopupOpen(false);
-		setInfoTooltipOpen(false);
-		setRegistrationError(false);
-	}
+        document.addEventListener('mousedown', closeByOverlay);
+        document.addEventListener('keydown', handleEscClose);
+        return () => {
+            document.removeEventListener('keydown', handleEscClose);
+            document.removeEventListener('mousedown', closeByOverlay);
+        }
+    })
 
-	//изменение стейта бургер меню
-	useEffect(() => {
-		if (screenWidth <= 680) {
-			setBurgerButtonActive(true);
-		} else {
-			setBurgerButtonActive(false);
-		}
-	}, [screenWidth])
+    //отслеживание изменения ширины окна
+    useEffect(() => {
+        function resizeScreen(e) {
+            setScreenWidth(e.target.innerWidth);
+        }
 
-	//открытие бургер меню
-	function handleClickBurgerMenu() {
-		if (burgerMenuActive === false) {
-			setBurgerMenuActive(true);
-		} else {
-			setBurgerMenuActive(false);
-		}
-	}
+        window.addEventListener('resize', resizeScreen);
+        return () => {
+            window.removeEventListener('resize', resizeScreen);
+        };
+    }, [])
 
-	//открытие попапа авторизации
-	function handleSignInClick() {
-		setIsSignInPopupOpen(true);
-	}
+    //функция закрытия попапов
+    function closeAllPopups() {
+        setErrorMessage('');
+        setIsSignInPopupOpen(false);
+        setIsSignUpPopupOpen(false);
+        setInfoTooltipOpen(false);
+    }
 
-	//переключение попапов
-	function handleSwitchPopup() {
-		if (isSignInPopupOpen) {
-			setIsSignInPopupOpen(false);
-			setIsSignUpPopupOpen(true);
-		} else {
-			setIsSignUpPopupOpen(false);
-			setIsSignInPopupOpen(true);
-			setRegistrationError(false);
-		}
-	}
+    //изменение стейта бургер меню
+    useEffect(() => {
+        if (screenWidth <= 680) {
+            setBurgerButtonActive(true);
+        } else {
+            setBurgerButtonActive(false);
+        }
+    }, [screenWidth])
 
-	//переход с тултипа на попап логина
-	function handleTooltipSwitch() {
-		setInfoTooltipOpen(false);
-		setIsSignInPopupOpen(true);
-	}
+    //открытие бургер меню
+    function handleClickBurgerMenu() {
+        if (burgerMenuActive === false) {
+            setBurgerMenuActive(true);
+        } else {
+            setBurgerMenuActive(false);
+        }
+    }
 
-	//обработчик регистрации
-	function handleRegistration(email, password, name) {
-		mainApi.register(email, password, name)
-			.then(() => {
-				setIsSignUpPopupOpen(false);
-				setRegistrationError(false);
-				setInfoTooltipOpen(true);
-			})
-			.catch((err) => {
-					setRegistrationError(true);
-					console.log(err);
-				}
-			)
-	}
+    //открытие попапа авторизации
+    function handleSignInClick() {
+        setErrorMessage('');
+        setIsSignInPopupOpen(true);
+    }
 
-	//обработчик авторизации
-	function handleAuthorization(email, password) {
-		mainApi.authorize(email, password)
-			.then(() => {
-				tokenCheck();
-			})
-			.catch((err) => {
-				console.log(err);
-			})
-	}
+    //переключение попапов
+    function handleSwitchPopup() {
+        if (isSignInPopupOpen) {
+            setErrorMessage('');
+            setIsSignInPopupOpen(false);
+            setIsSignUpPopupOpen(true);
+        } else {
+            setErrorMessage('');
+            setIsSignUpPopupOpen(false);
+            setIsSignInPopupOpen(true);
+        }
+    }
 
-	//логаут
-	function signOut() {
-		localStorage.removeItem('token');
-		setloggedIn(false);
-		setCurrentUser({});
-		setCurrentCards([]);
-		localStorage.setItem('localCards', JSON.stringify([]));
-		history.push('/');
-	}
+    //переход с тултипа на попап логина
+    function handleTooltipSwitch() {
+        setErrorMessage('');
+        setInfoTooltipOpen(false);
+        setIsSignInPopupOpen(true);
+    }
 
-	//сохранение карточек
-	function updateCards(cards) {
-		localStorage.setItem('localCards', JSON.stringify(cards.articles));
-		setCurrentCards([]);
-		setCurrentCards(cards.articles);
-		if (cards.totalResults === 0) {
-			setLoading(false);
-			setNotFound(true);
-		} else {
-			setLoading(false);
-			setNotFound(false);
-		}
-	}
+    //обработчик регистрации
+    function handleRegistration(email, password, name) {
+        setErrorMessage('')
+        mainApi.register(email, password, name)
+            .then(() => {
+                setIsSignUpPopupOpen(false);
+                setInfoTooltipOpen(true);
+            })
+            .catch((err) => {
+                    if (err === 409) {
+                        setErrorMessage('Пользователь с такой почтой уже создан');
+                    } else {
+                        setErrorMessage('Что-то пошло не так! Попробуйте ещё раз.');
+                    }
+                    console.log(err);
+                }
+            )
+    }
 
-	// запрос на получение новостей от внешнего API
-	function getNews(req) {
-		localStorage.setItem('keyWord', req);
-		setCurrentCards([]);
-		setLoading(true);
-		if (loggedIn) {
-			Promise.all([newsApi.getNews(req), mainApi.getCards()])
-				.then(([cards, saveCards]) => {
-					cards.articles.forEach(card => {
-						saveCards.forEach(saveCard => {
-							if (card.url === saveCard.link) {
-								card.marked = true;
-							}
-						})
-					})
-					updateCards(cards);
-				})
-				.catch(err => console.log(err))
-		} else {
-			newsApi.getNews(req)
-				.then(cards => {
-					updateCards(cards)
-				})
-				.catch(err => console.log(err))
-		}
-	}
+    //обработчик авторизации
+    function handleAuthorization(email, password) {
+        setErrorMessage('');
+        mainApi.authorize(email, password)
+            .then((res) => {
+                tokenCheck();
+            })
+            .catch((err) => {
+                if (err === 401) {
+                    setErrorMessage('Такого пользователя не существует. Попробуйте снова.');
+                } else if (err === 400) {
+                    setErrorMessage('Пожалуйста введите валидную почту');
+                } else {
+                    setErrorMessage('Что-то пошло не так! Попробуйте ещё раз.');
+                }
+                console.log(err);
+            })
+    }
 
-	//функция сохранения карточки
-	function saveCard(card) {
-		setBlockedTag(true);
-		const newCards = isCurrentCards.map(c => {
-			if (c.url === card.url) {
-				c.marked = true;
-			}
-			return c;
-		})
-		localStorage.setItem('localCards', JSON.stringify(newCards));
-		setCurrentCards([]);
-		setCurrentCards(newCards);
-		const keyword = localStorage.getItem('keyWord');
-		mainApi.createCard(keyword, card.title, card.description, card.publishedAt, card.source.name, card.url, card.urlToImage || NOT_FOUND_CARD_IMAGE)
-			.then((newSaveCard) => setSaveCards([newSaveCard,...isSaveCards]))
-			.then(() => setBlockedTag(false))
-			.catch(err => console.log(err))
-	}
+    //логаут
+    function signOut() {
+        setErrorMessage('');
+        localStorage.removeItem('token');
+        setloggedIn(false);
+        setCurrentUser({});
+        setCurrentCards([]);
+        localStorage.setItem('localCards', JSON.stringify([]));
+        history.push('/');
+    }
 
-	//функция удаления карточки
-	function deleteSaveCard(card) {
-		setBlockedTag(true)
-		const newCards = isCurrentCards.map(c => {
-			if (c.url === card.link || c.url === card.url) {
-				c.marked = false;
-			}
-			return c;
-		});
-		localStorage.setItem('localCards', JSON.stringify(isCurrentCards));
-		setCurrentCards([]);
-		setCurrentCards(newCards);
-		let newCard;
-		if (!card._id) {
-			newCard = isSaveCards.find(c => {
-				return c.link === card.url
-			})
-		} else {
-			newCard = card
-		}
-		mainApi.deleteCard(newCard._id)
-			.then(() => {
-				const newCards = isSaveCards.filter((c) => card._id !== c._id);
-				setSaveCards(newCards);
-			})
-			.then(() => {
-				setBlockedTag(false);
-			})
-			.catch(err => console.log(err))
-	}
+    //сохранение карточек
+    function updateCards(cards) {
+        localStorage.setItem('localCards', JSON.stringify(cards.articles));
+        setCurrentCards([]);
+        setCurrentCards(cards.articles);
+        if (cards.totalResults === 0) {
+            setLoading(false);
+            setNotFound(true);
+        } else {
+            setLoading(false);
+            setNotFound(false);
+        }
+    }
 
-	return (
+    // запрос на получение новостей от внешнего API
+    function getNews(req) {
+        setErrorNewsMessage('');
+        localStorage.setItem('keyWord', req);
+        setCurrentCards([]);
+        setLoading(true);
+        if (loggedIn) {
+            Promise.all([newsApi.getNews(req), mainApi.getCards()])
+                .then(([cards, saveCards]) => {
+                    cards.articles.forEach(card => {
+                        saveCards.forEach(saveCard => {
+                            if (card.url === saveCard.link) {
+                                card.marked = true;
+                            }
+                        })
+                    })
+                    updateCards(cards);
+                })
+                .catch((err) => {
+                        setErrorNewsMessage('Что-то пошло не так! Попробуйте ещё раз.');
+                        console.log(err);
+                    }
+                )
+        } else {
+            newsApi.getNews(req)
+                .then(cards => {
+                    updateCards(cards)
+                })
+                .catch((err) => {
+                    setErrorNewsMessage('Что-то пошло не так! Попробуйте ещё раз.');
+                    console.log(err);
+                })
+        }
+    }
 
-		<CurrentUserContext.Provider value={currentUser}>
-			<div className="root">
+    //функция сохранения карточки
+    function saveCard(card) {
+        setBlockedTag(true);
+        const newCards = isCurrentCards.map(c => {
+            if (c.url === card.url) {
+                c.marked = true;
+            }
+            return c;
+        })
+        localStorage.setItem('localCards', JSON.stringify(newCards));
+        setCurrentCards([]);
+        setCurrentCards(newCards);
+        const keyword = localStorage.getItem('keyWord');
+        mainApi.createCard(keyword, card.title, card.description, card.publishedAt, card.source.name, card.url, card.urlToImage || NOT_FOUND_CARD_IMAGE)
+            .then((newSaveCard) => setSaveCards([newSaveCard, ...isSaveCards]))
+            .then(() => setBlockedTag(false))
+            .catch(err => console.log(err))
+    }
 
-				<Header
-					isBurgerButton={burgerButtonActive}
-					isBurgerMenu={burgerMenuActive}
-					onSwitchMenu={handleClickBurgerMenu}
-					onSignIn={handleSignInClick}
-					onSignOut={signOut}
-					isLoggedIn={loggedIn}
-				/>
+    //функция удаления карточки
+    function deleteSaveCard(card) {
+        setBlockedTag(true)
+        const newCards = isCurrentCards.map(c => {
+            if (c.url === card.link || c.url === card.url) {
+                c.marked = false;
+            }
+            return c;
+        });
+        localStorage.setItem('localCards', JSON.stringify(isCurrentCards));
+        setCurrentCards([]);
+        setCurrentCards(newCards);
+        let newCard;
+        if (!card._id) {
+            newCard = isSaveCards.find(c => {
+                return c.link === card.url
+            })
+        } else {
+            newCard = card
+        }
+        mainApi.deleteCard(newCard._id)
+            .then(() => {
+                const newCards = isSaveCards.filter((c) => card._id !== c._id);
+                setSaveCards(newCards);
+            })
+            .then(() => {
+                setBlockedTag(false);
+            })
+            .catch(err => console.log(err))
+    }
 
-				<Switch>
-					<ProtectedRoute exact path="/saved-news"
-													loggedIn={loggedIn}
-													header={SavedNewsHeader}
-													component={SavedNews}
-													isBurgerButton={burgerButtonActive}
-													isBurgerMenu={burgerMenuActive}
-													onSwitchMenu={handleClickBurgerMenu}
-													isSaveCards={isSaveCards}
-													setSaveCards={setSaveCards}
-													onDeleteCard={deleteSaveCard}
-													onFormatDate={formatDate}
-					/>
-					<Route path="/">
-						<Main
-							isBurgerButton={burgerButtonActive}
-							isBurgerMenu={burgerMenuActive}
-							onSwitchMenu={handleClickBurgerMenu}
-							onSignIn={handleSignInClick}
-							onGetNews={getNews}
-							cards={isCurrentCards}
-							notFound={isNotFound}
-							isLoading={isLoading}
-							isLoggedIn={loggedIn}
-							onSaveCard={saveCard}
-							onFormatDate={formatDate}
-							onDeleteCard={deleteSaveCard}
-							onSignUpPopup={setIsSignUpPopupOpen}
-							isBlockedTag={isBlockedTag}
-						/>
-					</Route>
-					<Route path="/saved-news">
-						{loggedIn ? <Redirect to="/"/> : <Redirect to="/sign-in"/>}
-					</Route>
-				</Switch>
+    return (
 
-				<Footer/>
+        <CurrentUserContext.Provider value={currentUser}>
+            <div className="root">
 
-				<Login isOpen={isSignInPopupOpen}
-							 onClose={closeAllPopups}
-							 onSwitch={handleSwitchPopup}
-							 onLogin={handleAuthorization}
-				/>
+                <Header
+                    isBurgerButton={burgerButtonActive}
+                    isBurgerMenu={burgerMenuActive}
+                    onSwitchMenu={handleClickBurgerMenu}
+                    onSignIn={handleSignInClick}
+                    onSignOut={signOut}
+                    isLoggedIn={loggedIn}
+                />
 
-				<Register isOpen={isSignUpPopupOpen}
-									onClose={closeAllPopups}
-									onSwitch={handleSwitchPopup}
-									onRegistration={handleRegistration}
-									isError={isRegistrationError}
-				/>
+                <Switch>
+                    <ProtectedRoute exact path="/saved-news"
+                                    loggedIn={loggedIn}
+                                    header={SavedNewsHeader}
+                                    component={SavedNews}
+                                    isBurgerButton={burgerButtonActive}
+                                    isBurgerMenu={burgerMenuActive}
+                                    onSwitchMenu={handleClickBurgerMenu}
+                                    isSaveCards={isSaveCards}
+                                    setSaveCards={setSaveCards}
+                                    onDeleteCard={deleteSaveCard}
+                                    onFormatDate={formatDate}
+                    />
+                    <Route path="/">
+                        <Main
+                            isBurgerButton={burgerButtonActive}
+                            isBurgerMenu={burgerMenuActive}
+                            onSwitchMenu={handleClickBurgerMenu}
+                            onSignIn={handleSignInClick}
+                            onGetNews={getNews}
+                            cards={isCurrentCards}
+                            notFound={isNotFound}
+                            isLoading={isLoading}
+                            isLoggedIn={loggedIn}
+                            onSaveCard={saveCard}
+                            onFormatDate={formatDate}
+                            onDeleteCard={deleteSaveCard}
+                            onSignUpPopup={setIsSignUpPopupOpen}
+                            isBlockedTag={isBlockedTag}
+                            errorNewsMessage={errorNewsMessage}
+                        />
+                    </Route>
+                    <Route path="/saved-news">
+                        {loggedIn ? <Redirect to="/"/> : <Redirect to="/sign-in"/>}
+                    </Route>
+                </Switch>
 
-				<InfoTooltip isOpen={isInfoTooltipOpen}
-										 onClose={closeAllPopups}
-										 onSwitch={handleTooltipSwitch}
-				/>
+                <Footer/>
 
-			</div>
-		</CurrentUserContext.Provider>
-	);
+                <Login isOpen={isSignInPopupOpen}
+                       onClose={closeAllPopups}
+                       onSwitch={handleSwitchPopup}
+                       onLogin={handleAuthorization}
+                       errorMessage={errorMessage}
+                />
+
+                <Register isOpen={isSignUpPopupOpen}
+                          onClose={closeAllPopups}
+                          onSwitch={handleSwitchPopup}
+                          onRegistration={handleRegistration}
+                          errorMessage={errorMessage}
+                />
+
+                <InfoTooltip isOpen={isInfoTooltipOpen}
+                             onClose={closeAllPopups}
+                             onSwitch={handleTooltipSwitch}
+                />
+
+            </div>
+        </CurrentUserContext.Provider>
+    );
 }
 
 export default App;

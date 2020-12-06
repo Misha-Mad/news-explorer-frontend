@@ -3,7 +3,7 @@ import {useEffect} from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import useFormWithValidation from '../../hooks/useForm';
 
-function Register ({isOpen, onClose, onSwitch, onRegistration, isError}) {
+function Register ({isOpen, onClose, onSwitch, onRegistration, errorMessage}) {
 
 	const {values, handleChange, errors, isValid, resetForm} = useFormWithValidation()
 
@@ -33,6 +33,7 @@ function Register ({isOpen, onClose, onSwitch, onRegistration, isError}) {
 						 className={`popup__input popup__email `}
 						 type="email"
 						 required
+				   		minLength="8"
 						 maxLength="40"
 						 placeholder="Введите почту"
 						 onChange={handleChange}
@@ -61,7 +62,7 @@ function Register ({isOpen, onClose, onSwitch, onRegistration, isError}) {
 						 type="text"
 						 required
 						 minLength="2"
-						 maxLength="40"
+						 maxLength="30"
 						 placeholder="Введите своё имя"
 						 onChange={handleChange}
 						 value={values.name || ''}
@@ -69,8 +70,8 @@ function Register ({isOpen, onClose, onSwitch, onRegistration, isError}) {
 			<span
 				className={`popup__input-error popup__specialty-error popup__input-error_active ${!isValid && 'popup__input-error_active'}`}>{ errors.name || '' }
 			</span>
-			<span className={`popup__input-error_registration ${isError && 'popup__input-error_registration_active'} `}>
-				Такой пользователь уже есть
+			<span className={`popup__input-error_registration ${errorMessage && 'popup__input-error_registration_active'} `}>
+				{errorMessage}
 			</span>
 			<button disabled={!isValid} type="submit" className={`popup__save ${!isValid && 'popup__save_disabled'} `} onSubmit={handleSubmit}>Зарегистрироваться</button>
 		</PopupWithForm>

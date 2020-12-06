@@ -16,7 +16,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && scp -r F:\\учеба\\dev\\news-explorer-frontend\\build\\* praktikum@178.154.233.40:/home/praktikum/news-explorer-frontend"
+    "deploy": "npm run build && scp -r D:\\учеба\\dev\\news-explorer-frontend\\build\\* praktikum@84.201.150.123:/home/praktikum/news-explorer-frontend"
   },
   "eslintConfig": {
     "extends": [

@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import useFormWithValidation from '../../hooks/useForm';
 
-function Login ({isOpen, onClose, onSwitch, onLogin}) {
+function Login ({isOpen, onClose, onSwitch, onLogin, errorMessage}) {
 
 	const {values, handleChange, errors, isValid, resetForm} = useFormWithValidation()
 
@@ -34,6 +34,7 @@ function Login ({isOpen, onClose, onSwitch, onLogin}) {
 							 className={`popup__input popup__email`}
 							 type="email"
 							 required
+					    	 minLength="8"
 							 maxLength="40"
 							 placeholder="Введите почту"
 							 onChange={handleChange}
@@ -58,6 +59,9 @@ function Login ({isOpen, onClose, onSwitch, onLogin}) {
 				<span
 					className={`popup__input-error_registration `}
 				/>
+			<span className={`popup__input-error_registration ${errorMessage && 'popup__input-error_registration_active'} `}>
+				{errorMessage}
+			</span>
 			<button disabled={!isValid} type="submit" className={`popup__save ${!isValid && 'popup__save_disabled'} `} onSubmit={handleSubmit}>Войти</button>
 		</PopupWithForm>
 	)

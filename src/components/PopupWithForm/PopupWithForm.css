@@ -72,6 +72,9 @@
     border-bottom: 1px solid rgba(0, 0, 0, .2);
     margin: 0 auto;
     padding: 0 0 7px 0;
+    box-shadow: none;
+    border-radius: 0;
+    -webkit-appearance: none;
 }
 
 .popup__input-error {
@@ -84,6 +87,10 @@
     color: #FF0000;
     visibility: hidden;
     margin: 0 auto;
+}
+
+.popup__input:focus {
+    outline: none;
 }
 
 .popup__input-error_active {
@@ -179,7 +186,7 @@
     line-height: 17px;
     text-align: center;
     color: #000000;
-    margin: 0 auto;
+    margin: 0 auto 15px;
 }
 
 .popup__switch-button {

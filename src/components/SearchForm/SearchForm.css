@@ -53,15 +53,22 @@
     padding-left: 20px;
 }
 
-.search-form__input:focus {
-    border: 2px solid #347EFF;
-}
+
 
 .search-form__input::placeholder {
     font-family: Roboto, sans-serif;
     font-size: 16px;
     line-height: 22px;
     color: #B6BCBF;
+}
+
+.search-form__input:required {
+    box-shadow: none;
+}
+
+.search-form__input::-moz-placeholder {
+    line-height: 60px;
+    box-shadow: none;
 }
 
 .search-form__button {
@@ -90,6 +97,16 @@
 .search-form__button:active {
     background: #2A65CC;
     cursor: pointer;
+}
+
+.search-form__button_disabled {
+    background: #E6E8EB;
+    color: #B6BCBF;
+}
+
+.search-form__button_disabled:hover {
+    background: #E6E8EB;
+    color: #B6BCBF;
 }
 
 @media (max-width: 900px) {

@@ -2,7 +2,6 @@
     background-color: #fff;
     font-family: inter, Arial, Helvetica, sans-serif;
     color: #1A1B22;
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
     flex-shrink: 0;

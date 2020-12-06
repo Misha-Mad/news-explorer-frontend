@@ -20,7 +20,7 @@ function NewsCardList({isBurgerMenu, cards, isLoggedIn, onSaveCard, onFormatDate
 
 	//функция для кнопки показать еще
 	function handleSeeMoreNews() {
-		let moreArticles = [cards[isArticles.length], cards[isArticles.length +1], cards[isArticles.length + 2]]
+		const moreArticles = [cards[isArticles.length], cards[isArticles.length +1], cards[isArticles.length + 2]]
 		if (moreArticles[0] === undefined ) {
 			setButtonDisabled(true);
 			return;

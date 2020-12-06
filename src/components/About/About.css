@@ -1,21 +1,27 @@
 .about {
     max-width: 1440px;
     width: 100%;
+    max-height: 624px;
     background-color: #fff;
     margin: 0 auto;
     display: flex;
+    flex-direction: row;
     justify-content: flex-start;
+    align-items: center;
 }
 
 .about__avatar {
     width: 32.2%;
+    height: auto;
     border-radius: 50%;
-    margin: 80px 56px 80px 7.2%;
+    margin: 80px 5% 80px 7.2%;
+    object-fit: contain;
 }
 
 .about__container {
     max-width: 600px;
-    margin: 11% 7.2% 0 0;
+    margin-right: 7.2%;
+
 }
 
 .about__title {
@@ -37,25 +43,22 @@
     color: #1A1B22;
 }
 
-@media (max-width: 1200px) {
-    .about__container {
-        margin-top: 11.3%;
-    }
-}
-
 @media (max-width: 950px) {
     .about__avatar {
-        width: 30.2%;
         margin-left: 5.2%;
     }
     .about__title {
         font-size: 30px;
         line-height: 40px;
     }
+    .about__container {
+        margin-right: 5.2%;
+    }
 }
 
 @media (max-width: 650px) {
     .about {
+        max-height: 800px;
         flex-direction: column;
         align-items: center;
     }
@@ -65,6 +68,7 @@
         margin: 32px auto 24px;
     }
     .about__container {
-        margin: 0 16px 80px;
+        margin: 0 5%;
     }
+
 }
