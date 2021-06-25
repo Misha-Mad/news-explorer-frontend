@@ -1,9 +1,8 @@
-import './SignInPopup.css';
 import {useEffect} from 'react';
 import PopupWithForm from '../PopupWithForm/PopupWithForm';
 import useFormWithValidation from '../../hooks/useForm';
 
-function SignInPopup ({isOpen, onClose, onSwitch}) {
+function Login ({isOpen, onClose, onSwitch, onLogin, errorMessage}) {
 
 	const {values, handleChange, errors, isValid, resetForm} = useFormWithValidation()
 
@@ -11,12 +10,23 @@ function SignInPopup ({isOpen, onClose, onSwitch}) {
 		resetForm({email: '', password: ''},{},false);
 	}, [isOpen, resetForm])
 
+	function handleSubmit(e) {
+		e.preventDefault();
+		const email = values.email;
+		const password = values.password;
+		if (!email || !password) {
+			return;
+		}
+		onLogin(email, password);
+	}
+
 	return (
 		<PopupWithForm name={'edit'}
 									 title={'Вход'}
 									 isOpen={isOpen}
 									 onClose={onClose}
 									 onSwitch={onSwitch}
+									 onSubmit={handleSubmit}
 									 >
 			<label className="popup__label" htmlFor="email">Email</label>
 				<input name="email"
@@ -24,6 +34,7 @@ function SignInPopup ({isOpen, onClose, onSwitch}) {
 							 className={`popup__input popup__email`}
 							 type="email"
 							 required
+					    	 minLength="8"
 							 maxLength="40"
 							 placeholder="Введите почту"
 							 onChange={handleChange}
@@ -48,9 +59,13 @@ function SignInPopup ({isOpen, onClose, onSwitch}) {
 				<span
 					className={`popup__input-error_registration `}
 				/>
+			<span className={`popup__input-error_registration ${errorMessage && 'popup__input-error_registration_active'} `}>
+				{errorMessage}
+			</span>
+			<button disabled={!isValid} type="submit" className={`popup__save ${!isValid && 'popup__save_disabled'} `} onSubmit={handleSubmit}>Войти</button>
 		</PopupWithForm>
 	)
 
 }
 
-export default SignInPopup;
+export default Login;

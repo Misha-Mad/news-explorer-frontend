@@ -9,9 +9,11 @@
 
 .news-card__image {
     width: 100%;
-    max-height: 272px;
-    object-fit: cover;
+    height: 270px;
+    min-height: 270px;
+    object-fit: fill;
     border-radius: 20px 20px 0 0;
+
 }
 
 .news-card__tag {
@@ -22,7 +24,10 @@
     right: 24px;
     background-color: #fff;
     border-radius: 8px;
+    outline: none;
+    border: none;
 }
+
 
 .news-card__tag_mark {
     background-image: url('../../images/MarkNormal.svg');
@@ -53,6 +58,18 @@
     background-image: url('../../images/MarkHover.svg');
 }
 
+.news-card__tag_disabled:hover {
+    background-image: url('../../images/MarkNormal.svg');
+}
+
+.news-card__tag_marked {
+    background-image: url('../../images/MarkMarked.svg');
+}
+
+.news-card__tag_marked:hover {
+    background-image: url('../../images/MarkMarked.svg');
+}
+
 .news-card__tag_mark:hover + .news-card__tag_help {
     opacity: 1;
     transition: opacity .3s linear, visibility .3s;
@@ -80,7 +97,7 @@
 .news-card__tag_theme {
     top: 24px;
     left: 24px;
-    width: 88px;
+    width: 110px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -89,6 +106,15 @@
     font-weight: 600;
     font-size: 14px;
     line-height: 24px;
+    opacity: 1;
+    transition: opacity .3s linear, visibility .3s;
+    visibility: visible;
+}
+
+.news-card__tag_trash:hover ~ .news-card__tag_theme {
+    opacity: 0;
+    transition: opacity .3s linear, visibility .3s;
+    visibility: hidden;
 }
 
 .news-card__tag_del-save {
@@ -163,9 +189,6 @@
     }
     .news-card__tag_help {
         right: 56px;
-    }
-    .news-card__tag_del-save {
-        display: none;
     }
     .news-card__tag_theme {
         left: 8px;

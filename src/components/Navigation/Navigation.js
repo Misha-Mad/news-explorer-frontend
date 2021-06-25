@@ -1,10 +1,13 @@
 import './Navigation.css';
+import {useContext} from 'react';
 import {Link, useLocation} from 'react-router-dom';
 import ExitIcon from '../../images/Exit.svg';
 import ExitSavedNews from '../../images/Exit_SavedNews.svg';
+import CurrentUserContext from '../../contexts/CurrentUserContext';
 
-function Navigation({isBurgerButton, isBurgerMenu, onSwitchMenu, onSignIn}) {
+function Navigation({isBurgerButton, isBurgerMenu, onSwitchMenu, onSignIn, onSignOut, isLoggedIn}) {
 
+	const currentUser = useContext(CurrentUserContext);
 	const location = useLocation();
 
 	return (
@@ -18,7 +21,7 @@ function Navigation({isBurgerButton, isBurgerMenu, onSwitchMenu, onSignIn}) {
 				<span className={
 					`navigation__burger-span 
 					${isBurgerMenu && 'navigation__burger-span_close-one'}
-					${(location.pathname === '/saved-news' && !isBurgerMenu)  && 'navigation__burger-span_saved-news'}
+					${(location.pathname === '/saved-news' && !isBurgerMenu) && 'navigation__burger-span_saved-news'}
 					`}
 				/>
 
@@ -39,7 +42,7 @@ function Navigation({isBurgerButton, isBurgerMenu, onSwitchMenu, onSignIn}) {
 			>
 
 				<Link to="/"
-					className={` 
+							className={` 
 					${isBurgerMenu && 'navigation__link_burger'} 
 					navigation__link 
 					${location.pathname === '/' && 'navigation__link_active'}
@@ -51,16 +54,19 @@ function Navigation({isBurgerButton, isBurgerMenu, onSwitchMenu, onSignIn}) {
 					`navigation__link 
 					${isBurgerMenu && 'navigation__link_burger'}
 					${location.pathname === '/saved-news' && 'navigation__link_saved-news navigation__link_active-saved-news'}
+					${!isLoggedIn && 'navigation__link_hidden'}
 					`}
 				>Сохранённые статьи</Link>
 
-				<button onClick={onSignIn} className={
-					`navigation__button 
+				<button onClick={isLoggedIn ? onSignOut: onSignIn}
+								className={
+									`navigation__button 
 					${isBurgerMenu && 'navigation__button_burger'}
 					${location.pathname === '/saved-news' && 'navigation__button_saved-news'}
 					`}
-				>{location.pathname === '/saved-news' ? 'Misha' : 'Авторизоваться'}
-					{location.pathname === '/saved-news' && <img alt="иконка логаута" className="navigation__icon" src={`${(location.pathname === '/saved-news' && !isBurgerMenu) ? ExitSavedNews : ExitIcon}`}/>}
+				>{currentUser.name ? currentUser.name : 'Авторизоваться'}
+					{currentUser.name && <img alt="иконка логаута" className="navigation__icon"
+																		src={`${(location.pathname === '/saved-news' && !isBurgerMenu) ? ExitSavedNews : ExitIcon}`}/>}
 				</button>
 
 			</nav>

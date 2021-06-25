@@ -1,32 +1,64 @@
 import './SavedNewsHeader.css';
-import Navigation from '../Navigation/Navigation';
-import {Link} from "react-router-dom";
+import CurrentUserContext from '../../contexts/CurrentUserContext';
+import {useContext, useEffect, useState} from 'react';
 
-function SavedNewsHeader({isBurgerButton, isBurgerMenu, onSwitchMenu}) {
+function SavedNewsHeader({isSaveCards}) {
+
+	const currentUser = useContext(CurrentUserContext);
+	const [isSaveWord, setSaveWord] = useState('сохранённых статей');
+	const [isTagArr, setTagArr] = useState([]);
+
+	function countTag(arr) {
+		return arr.reduce((acc, el) => {
+			acc[el] = (acc[el] || 0) + 1;
+			return acc;
+		}, {});
+	}
+
+	useEffect(() => {
+		const arrayLength = isSaveCards.length.toString();
+		const lastNumberOfArray = parseInt(arrayLength[arrayLength.length - 1]);
+		if (lastNumberOfArray === 1 && isSaveCards.length !== 11) {
+			setSaveWord('сохранённая статья');
+		} else {
+			setSaveWord('сохранённых статей');
+		}
+		const tagArray = [];
+		isSaveCards.map((card) => {
+			return tagArray.push(card.keyword);
+		});
+		const countTagObj = countTag(tagArray);
+		const sortableTag = [];
+		for (let tag in countTagObj) {
+			sortableTag.push([tag, countTagObj[tag]])
+		}
+		sortableTag.sort((a, b) => {
+			return b[1] - a[1];
+		});
+		const resultTag = sortableTag.map(arr => {
+			return arr[0];
+		})
+		setTagArr(resultTag);
+	}, [isSaveCards])
+
 
 	return (
-		isBurgerMenu ? (
-			<header className="header burger-menu__header">
-				<Link to="/" className="header__link">
-					<div className="header__logo "/>
-				</Link>
-				<Navigation
-					isBurgerButton={isBurgerButton}
-					isBurgerMenu={isBurgerMenu}
-					onSwitchMenu={onSwitchMenu}
-				/>
-			</header>
-		) : (
-			<header className="header_saved-news">
-				<Link to="/" className="header__link">
-					<div className=" header__logo_saved-news"/>
-				</Link>
-				<Navigation
-					isBurgerButton={isBurgerButton}
-					isBurgerMenu={isBurgerMenu}
-					onSwitchMenu={onSwitchMenu}
-				/>
-			</header>)
+
+		<section className="saved-news-header">
+			<div className="saved-news-header__description">
+				<p className="saved-news-header__subtitle">Сохранённые статьи</p>
+				<h1 className="saved-news-header__title">
+					<span>{currentUser.name}</span>, у вас
+					<span> {isSaveCards.length}</span> <span>{isSaveWord}</span></h1>
+				<p className="saved-news-header__keywords">По ключевым словам:
+					<span className="saved-news-header__keyword"> {isTagArr[0]}</span>
+					{(isTagArr.length > 1) && <span>,</span>}
+					<span className="saved-news-header__keyword"> {isTagArr[1]}</span>
+					{(isTagArr.length > 2) && <span className="saved-news-header__keyword"> и {isTagArr.length - 2} другим</span>}
+				</p>
+			</div>
+		</section>
+
 	)
 }
 
